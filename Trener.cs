@@ -1,9 +1,9 @@
 class Trener
 {
-    string Jmeno { get; set; }
-    int Level { get; set; }
-    List<Cichnamon> Cichnamoni { get; set; }
-    Cichnamon VybranyCichnamon { get; set; }
+    public string Jmeno { get; set; }
+    public int Level { get; set; }
+    public List<Cichnamon> Cichnamoni { get; set; }
+    public Cichnamon VybranyCichnamon { get; set; }
 
     public Trener(string jmeno, List<Cichnamon> cichnamoni, Cichnamon vybranyCichnamon, int level = 0)
     {

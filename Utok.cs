@@ -1,8 +1,8 @@
 class Utok
 {
-    string Nazev { get; set; }
-    int PoskozeniUtoku { get; set; }
-    string PopisUtoku { get; set; }
+    public string Nazev { get; set; }
+    public int PoskozeniUtoku { get; set; }
+    public string PopisUtoku { get; set; }
 
     public Utok(string nazev, int poskozeniUtoku, string popisUtoku)
     {
@@ -11,12 +11,12 @@ class Utok
         PopisUtoku = popisUtoku;
     }
 
-    void VypisInfo()
+    public void VypisInfo()
     {
         Console.WriteLine(PopisUtoku);
     }
 
-    void VypisHodnotyPoskozeni()
+    public void VypisHodnotyPoskozeni()
     {
         Console.WriteLine(PoskozeniUtoku);
     }
