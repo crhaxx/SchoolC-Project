@@ -29,9 +29,13 @@ class Nastaveni
         List<Cichnamon> XuCichnamoni = [SvetrMon];
 
         Trener Xuperman = new Trener(jmeno: "Xuperman", XuCichnamoni, SvetrMon);
+        Trener Rabot = new Trener(jmeno: "Rabot", XuCichnamoni, SvetrMon);
+
+
 
         cichnamons.Add(SvetrMon);
         treners.Add(Xuperman);
+        treners.Add(Rabot);
 
         Nastaveni defaultniNas = new Nastaveni(cichnamons, treners, utoks);
 
