@@ -18,12 +18,15 @@ class Cichnamon
         SpecialniUtok = specialniUtok;
     }
 
-    public void ZautocitZakladniUtok(Trener trener)
+    public void ZautocitZakladniUtok(Cichnamon protivnikuvCichnamon)
     {
-
+        protivnikuvCichnamon.SnizitZdravi(ZakladniUtok.PoskozeniUtoku);
     }
 
-    public void ZautocitSpecialniUtok(Trener trener) { }
+    public void ZautocitSpecialniUtok(Cichnamon protivnikuvCichnamon)
+    {
+        protivnikuvCichnamon.SnizitZdravi(SpecialniUtok.PoskozeniUtoku);
+    }
 
     public void SnizitZdravi(int hodnota)
     {

@@ -1,3 +1,5 @@
+using static System.Console;
+
 class Trener
 {
     public string Jmeno { get; set; }
@@ -11,5 +13,28 @@ class Trener
         Level = level;
         Cichnamoni = cichnamoni;
         VybranyCichnamon = vybranyCichnamon;
+    }
+
+    public void ZobrazitCichnamony()
+    {
+        int i = 0;
+        foreach (Cichnamon cichnamon in Cichnamoni)
+        {
+            WriteLine($"{i + 1} - {cichnamon.Jmeno}, HP: {cichnamon.Zdravi}/{cichnamon.MaxZdravi}");
+            i++;
+        }
+    }
+
+    public List<Cichnamon> ZobrazitZijiciCichnamony()
+    {
+        List<Cichnamon> zijiciCichnamoni = new List<Cichnamon>();
+        foreach (Cichnamon cichnamon in Cichnamoni)
+        {
+            if (cichnamon.Zdravi > 0)
+            {
+                zijiciCichnamoni.Add(cichnamon);
+            }
+        }
+        return zijiciCichnamoni;
     }
 }

@@ -24,18 +24,32 @@ class Nastaveni
         utoks.Add(new Utok("Topspin", 35, "Velmi jednoduchý a i použitelný útok, nejlepší kompromis pro útok i jistotu"));
 
         Cichnamon SvetrMon = new Cichnamon("Svetr", 100, 100, 20, utoks[2], utoks[3]);
-        Cichnamon DomcaMon = new Cichnamon("Domca", 100, 100, 10, utoks[2], utoks[3]);
+        Cichnamon DomcaMon = new Cichnamon("Domca", 100, 100, 10, utoks[0], utoks[1]);
+        Cichnamon SlabceMon = new Cichnamon("Slabce", 100, 100, 10, utoks[2], utoks[3]);
+        Cichnamon SlusnaMon = new Cichnamon("Slusna", 100, 100, 10, utoks[3], utoks[4]);
 
-        List<Cichnamon> XuCichnamoni = [SvetrMon];
+        List<Cichnamon> XuCichnamoni = [SvetrMon, DomcaMon];
+        List<Cichnamon> RabotCichnamoni = [DomcaMon, SvetrMon];
+        List<Cichnamon> SlabceCichnamoni = [SlabceMon, SvetrMon];
+        List<Cichnamon> SlusnaCichnamoni = [SlusnaMon, DomcaMon];
+
 
         Trener Xuperman = new Trener(jmeno: "Xuperman", XuCichnamoni, SvetrMon);
-        Trener Rabot = new Trener(jmeno: "Rabot", XuCichnamoni, SvetrMon);
+        Trener Rabot = new Trener(jmeno: "Rabot", RabotCichnamoni, DomcaMon);
+        Trener Slabce = new Trener(jmeno: "Slabce", SlabceCichnamoni, SlabceMon);
+        Trener Slusna = new Trener(jmeno: "Slusna", SlusnaCichnamoni, SlusnaMon);
 
 
 
         cichnamons.Add(SvetrMon);
+        cichnamons.Add(DomcaMon);
+        cichnamons.Add(SlabceMon);
+        cichnamons.Add(SlusnaMon);
+
         treners.Add(Xuperman);
         treners.Add(Rabot);
+        treners.Add(Slabce);
+        treners.Add(Slusna);
 
         Nastaveni defaultniNas = new Nastaveni(cichnamons, treners, utoks);
 
