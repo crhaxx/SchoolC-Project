@@ -16,16 +16,18 @@ Při vývoji byl jako poradce a designer vzhledu využit editor **[Cursor](https
 
 ## Požadavky
 
-- [.NET SDK 10.0](https://dotnet.microsoft.com/download) nebo novější
+- [Git](https://git-scm.com/install/) — ke stažení projektu z repozitáře
+- [.NET SDK 10.0](https://dotnet.microsoft.com/en-us/download) nebo novější — ke spuštění programu
 - Terminál (Linux, macOS nebo Windows)
 
 Ověření instalace:
 
 ```bash
+git --version
 dotnet --version
 ```
 
-Měla by se zobrazit verze **10.0** nebo vyšší.
+Měla by se zobrazit verze **10.0** nebo vyšší u .NET SDK.
 
 ## Spuštění programu
 
