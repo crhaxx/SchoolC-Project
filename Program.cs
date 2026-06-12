@@ -83,7 +83,7 @@ class Projekt
     return false;
     }
 
-    static void Game(Nastaveni nastaveni) {
+    static void Game() {
         Clear();
         ConsoleUI.ZobrazitLogo();
         ConsoleUI.ZobrazitNadpis("NOVÁ HRA", ConsoleColor.Green);
@@ -94,18 +94,18 @@ class Projekt
         ConsoleUI.ZobrazitNadpis("VÝBĚR TRENÉRA", ConsoleColor.Cyan);
 
         List<string> treneriMenu = new List<string>();
-        for (int i = 0; i < nastaveni.Treners.Count; i++)
+        for (int i = 0; i < Nastaveni.Treners.Count; i++)
         {
-            treneriMenu.Add($"{i + 1} - {nastaveni.Treners[i].Jmeno}");
+            treneriMenu.Add($"{i + 1} - {Nastaveni.Treners[i].Jmeno}");
         }
         ConsoleUI.ZobrazitMenu("Zvolte svého trenéra", treneriMenu);
 
         int volbaTrenera = ConsoleUI.CtiVolbu("Zadej číslo trenéra: ") - 1;
         WriteLine();
 
-        if (volbaTrenera >= 0 && volbaTrenera < nastaveni.Treners.Count)
+        if (volbaTrenera >= 0 && volbaTrenera < Nastaveni.Treners.Count)
         {
-            hrac = nastaveni.Treners[volbaTrenera];
+            hrac = Nastaveni.Treners[volbaTrenera];
             ConsoleUI.ZobrazitUspech($"Zvolil jste trenéra: {hrac.Jmeno}");
         }
         else
@@ -122,10 +122,10 @@ class Projekt
 
         do
         {
-            indexProtihrace = random.Next(nastaveni.Treners.Count);
-        } while (nastaveni.Treners.Count > 1 && indexProtihrace == volbaTrenera);
+            indexProtihrace = random.Next(Nastaveni.Treners.Count);
+        } while (Nastaveni.Treners.Count > 1 && indexProtihrace == volbaTrenera);
 
-        protivnik = nastaveni.Treners[indexProtihrace];
+        protivnik = Nastaveni.Treners[indexProtihrace];
         ConsoleUI.ZobrazitInfo($"Protivník si zvolil trenéra: {protivnik.Jmeno}");
         ConsoleUI.ZobrazitPokracovat();
 
@@ -299,7 +299,7 @@ class Projekt
     static void Main()
     {
         Clear();
-        Nastaveni nastaveni = new Nastaveni(new List<Cichnamon>(), new List<Trener>(), new List<Utok>()).DefaultniNastaveni();
+        Nastaveni.DefaultniNastaveni();
         int akce = 0;
         bool pokracovat = true;
 
@@ -321,16 +321,16 @@ class Projekt
             switch (akce)
             {
                 case 1:
-                    Game(nastaveni);
+                    Game();
                     break;
                 case 2:
                     Clear();
-                    ConsoleUI.ZobrazitVsechnyCichnamony(nastaveni.Cichnamons);
+                    ConsoleUI.ZobrazitVsechnyCichnamony();
                     ConsoleUI.ZobrazitPokracovat();
                     break;
                 case 3:
                     Clear();
-                    ConsoleUI.ZobrazitTrenery(nastaveni.Treners);
+                    ConsoleUI.ZobrazitTrenery();
                     ConsoleUI.ZobrazitPokracovat();
                     break;
                 case 4:

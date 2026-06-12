@@ -260,8 +260,9 @@ static class ConsoleUI
         ResetColor();
     }
 
-    public static void ZobrazitTrenery(IEnumerable<Trener> treneri)
+    public static void ZobrazitTrenery()
     {
+        List<Trener> treneri = Nastaveni.Treners;
         ZobrazitNadpis("DOSTUPNÍ TRENÉŘI", ConsoleColor.Cyan);
 
         ForegroundColor = ConsoleColor.White;
@@ -280,8 +281,9 @@ static class ConsoleUI
         WriteLine();
     }
 
-    public static void ZobrazitVsechnyCichnamony(IEnumerable<Cichnamon> cichnamoni)
+    public static void ZobrazitVsechnyCichnamony()
     {
+        List<Cichnamon> cichnamoni = Nastaveni.Cichnamons;
         ZobrazitNadpis("DOSTUPNÍ CICHNAMONI", ConsoleColor.Cyan);
 
         ForegroundColor = ConsoleColor.White;
