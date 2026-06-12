@@ -10,7 +10,7 @@
         "projectUniqueName": "/home/nikola/Desktop/code/c#/SchoolC-Project/Project.csproj",
         "projectName": "Project",
         "projectPath": "/home/nikola/Desktop/code/c#/SchoolC-Project/Project.csproj",
-        "packagesPath": "/tmp/cursor-sandbox-cache/33dc35dedec911437689b2f3ca4378b0/nuget",
+        "packagesPath": "/home/nikola/.nuget/packages/",
         "outputPath": "/home/nikola/Desktop/code/c#/SchoolC-Project/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [

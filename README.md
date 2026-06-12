@@ -55,15 +55,18 @@ Na Windows spusťte místo toho soubor `Project.exe` ve stejné složce.
 
 ## Struktura projektu
 
-
-| Soubor         | Popis                                  |
-| -------------- | -------------------------------------- |
-| `Program.cs`   | Hlavní logika hry a menu               |
-| `Cichnamon.cs` | Třída Čichnamona (zdraví, útoky)       |
-| `Trener.cs`    | Třída trenéra a jeho tým Čichnamonů    |
-| `Utok.cs`      | Základní a speciální útoky             |
-| `ConsoleUI.cs` | Vzhled a výstup v konzoli              |
-| `Nastaveni.cs` | Výchozí data hry (Čichnamoni, trenéři) |
+```
+SchoolC-Project/
+├── Program.cs              # Hlavní logika hry a menu
+├── Modely/
+│   ├── Cichnamon.cs        # Třída Čichnamona (zdraví, útoky)
+│   ├── Trener.cs           # Třída trenéra a jeho tým Čichnamonů
+│   └── Utok.cs             # Základní a speciální útoky
+├── Nastaveni/
+│   └── Nastaveni.cs        # Výchozí data hry (Čichnamoni, trenéři)
+└── UI/
+    └── ConsoleUI.cs        # Vzhled a výstup v konzoli
+```
 
 
 ## Hraní
