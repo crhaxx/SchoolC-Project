@@ -2,147 +2,321 @@
 
 class Projekt
 {
-    static void Game(Nastaveni nastaveni) {
-                    Clear();
-                    WriteLine();
-                    WriteLine("Hra spuštěna!");
-                    WriteLine();
-                    WriteLine();
+    static bool ProtivnikuvTah(Trener protivnik, Cichnamon zvolenyCichnamon, bool hracSeBrani, out bool protivnikSeBrani) {
+        Random random = new Random();
+        int volbaAkce = random.Next(1, 4);
+        protivnikSeBrani = false;
 
-                    Trener hrac = null;
-                    Trener protivnik = null;
+        int volbaCichnamona = random.Next(protivnik.Cichnamoni.Count);
+        Cichnamon zvolenyProtivnikuvCichnamon = protivnik.Cichnamoni[volbaCichnamona];
+        ConsoleUI.ZobrazitAkci($"Protivník zvolil cichnamona: {zvolenyProtivnikuvCichnamon.Jmeno}");
 
-                    WriteLine("Zvolte svého trenéra");
-                    for (int i = 0; i < nastaveni.Treners.Count; i++)
-                    {
-                        WriteLine($"{i + 1} - {nastaveni.Treners[i].Jmeno}");
-                    }
+        switch (volbaAkce) {
+            case 1:
+                ConsoleUI.ZobrazitAkci("Protivník si zvolil útok!");
+                WriteLine();
 
-                    Write("Zadej číslo trenéra: ");
+                if (hracSeBrani && random.Next(2) == 0)
+                {
+                    ConsoleUI.ZobrazitObranu(zvolenyCichnamon.Jmeno);
+                }
+                else
+                {
+                    int indexUtoku = random.Next(2);
 
-                    int volbaTrenera = int.Parse(ReadLine()) - 1;
-
-                    WriteLine();
-
-                    if (volbaTrenera >= 0 && volbaTrenera < nastaveni.Treners.Count)
-                    {
-                        hrac = nastaveni.Treners[volbaTrenera];
-                        WriteLine($"Zvolil jste trenéra: {hrac.Jmeno}");
+                    if (indexUtoku == 0) {
+                        zvolenyProtivnikuvCichnamon.ZautocitZakladniUtok(zvolenyCichnamon);
                     }
                     else
                     {
-                        WriteLine("Neplatná volba trenéra.");
+                        zvolenyProtivnikuvCichnamon.ZautocitSpecialniUtok(zvolenyCichnamon);
+                    }
+                }
+
+                if (zvolenyCichnamon.Zdravi <= 0)
+                {
+                    return true;
+                }
+                break;
+            case 2:
+                ConsoleUI.ZobrazitAkci("Protivník si zvolil obranu!");
+                protivnikSeBrani = true;
+                break;
+            case 3:
+                ConsoleUI.ZobrazitAkci("Protivník si zvolil doplnění zdraví!");
+
+                List<Cichnamon> potrebujiUzdraveni = new List<Cichnamon>();
+                foreach (Cichnamon c in protivnik.Cichnamoni)
+                {
+                    if (c.Zdravi > 0 && c.Zdravi < c.MaxZdravi)
+                    {
+                        potrebujiUzdraveni.Add(c);
+                    }
+                }
+
+                if (potrebujiUzdraveni.Count == 0)
+                {
+                    volbaAkce = random.Next(1, 3);
+                    if (volbaAkce == 1)
+                    {
+                        goto case 1;
+                    }
+                    goto case 2;
+                }
+
+                if (zvolenyProtivnikuvCichnamon.Zdravi >= zvolenyProtivnikuvCichnamon.MaxZdravi)
+                {
+                    zvolenyProtivnikuvCichnamon = potrebujiUzdraveni[random.Next(potrebujiUzdraveni.Count)];
+                    ConsoleUI.ZobrazitVarovani("Cichnamon již má maximální zdraví!");
+                    ConsoleUI.ZobrazitAkci($"Protivník zvolil jiného cichnamona: {zvolenyProtivnikuvCichnamon.Jmeno}");
+                }
+
+                bool bylUzdrav = zvolenyProtivnikuvCichnamon.Uzdravit(10);
+
+                if (bylUzdrav)
+                {
+                    ConsoleUI.ZobrazitUzdraveni(zvolenyProtivnikuvCichnamon.Jmeno, 10, false);
+                }
+                break;
+    }
+
+    return false;
+    }
+
+    static void Game(Nastaveni nastaveni) {
+        Clear();
+        ConsoleUI.ZobrazitLogo();
+        ConsoleUI.ZobrazitNadpis("NOVÁ HRA", ConsoleColor.Green);
+
+        Trener hrac = null;
+        Trener protivnik = null;
+
+        ConsoleUI.ZobrazitNadpis("VÝBĚR TRENÉRA", ConsoleColor.Cyan);
+
+        List<string> treneriMenu = new List<string>();
+        for (int i = 0; i < nastaveni.Treners.Count; i++)
+        {
+            treneriMenu.Add($"{i + 1} - {nastaveni.Treners[i].Jmeno}");
+        }
+        ConsoleUI.ZobrazitMenu("Zvolte svého trenéra", treneriMenu);
+
+        int volbaTrenera = ConsoleUI.CtiVolbu("Zadej číslo trenéra: ") - 1;
+        WriteLine();
+
+        if (volbaTrenera >= 0 && volbaTrenera < nastaveni.Treners.Count)
+        {
+            hrac = nastaveni.Treners[volbaTrenera];
+            ConsoleUI.ZobrazitUspech($"Zvolil jste trenéra: {hrac.Jmeno}");
+        }
+        else
+        {
+            ConsoleUI.ZobrazitChybu("Neplatná volba trenéra.");
+            ConsoleUI.ZobrazitPokracovat();
+            return;
+        }
+
+        WriteLine();
+
+        Random random = new Random();
+        int indexProtihrace;
+
+        do
+        {
+            indexProtihrace = random.Next(nastaveni.Treners.Count);
+        } while (nastaveni.Treners.Count > 1 && indexProtihrace == volbaTrenera);
+
+        protivnik = nastaveni.Treners[indexProtihrace];
+        ConsoleUI.ZobrazitInfo($"Protivník si zvolil trenéra: {protivnik.Jmeno}");
+        ConsoleUI.ZobrazitPokracovat();
+
+        int akce = 0;
+        bool nekdoUmrel = false;
+        bool protivnikSeBrani = false;
+
+        while(nekdoUmrel == false) {
+            Clear();
+            ConsoleUI.ZobrazitBojovyPrehled(hrac, protivnik);
+
+            ConsoleUI.ZobrazitMenu("VAŠE AKCE", new[]
+            {
+                "1 - Útok",
+                "2 - Obrana",
+                "3 - Doplnění zdraví"
+            });
+
+            akce = ConsoleUI.CtiVolbu("Zvolte akci: ");
+            bool hracSeBrani = false;
+            Cichnamon zvolenyCichnamon = null;
+
+            switch (akce)
+            {
+                case 1:
+                {
+                    ConsoleUI.ZobrazitAkci("Zvolil jste útok!");
+                    WriteLine();
+                    bool platnyCichnamon = false;
+
+                    while (platnyCichnamon == false) {
+                        ConsoleUI.ZobrazitNadpis("VÝBĚR CICHNAMONA", ConsoleColor.Yellow);
+                        hrac.ZobrazitCichnamony();
+                        WriteLine();
+
+                        int volbaCichnamona = ConsoleUI.CtiVolbu("Zvolte cichnamona: ") - 1;
+
+                        if (volbaCichnamona < 0 || volbaCichnamona >= hrac.Cichnamoni.Count || hrac.Cichnamoni[volbaCichnamona].Zdravi <= 0)
+                        {
+                            ConsoleUI.ZobrazitChybu("Neplatná volba cichnamona.");
+                            continue;
+                        }
+
+                        ConsoleUI.ZobrazitUspech($"Zvolil jste cichnamona: {hrac.Cichnamoni[volbaCichnamona].Jmeno}");
+                        zvolenyCichnamon = hrac.Cichnamoni[volbaCichnamona];
+                        platnyCichnamon = true;
                     }
 
-                    WriteLine();
+                    int indexUtoku = random.Next(2);
 
-                    Random random = new Random();
-                    int indexProtihrace;
+                    Cichnamon prvniProtivnikuvCichnamon = protivnik.ZobrazitZijiciCichnamony()[0];
 
-                    do
+                    if (protivnikSeBrani && random.Next(2) == 0)
                     {
-                        indexProtihrace = random.Next(nastaveni.Treners.Count);
-                    } while (nastaveni.Treners.Count > 1 && indexProtihrace == volbaTrenera);
+                        ConsoleUI.ZobrazitObranu(prvniProtivnikuvCichnamon.Jmeno);
+                    }
+                    else if (indexUtoku == 0)
+                    {
+                        zvolenyCichnamon.ZautocitZakladniUtok(prvniProtivnikuvCichnamon);
+                    }
+                    else
+                    {
+                        zvolenyCichnamon.ZautocitSpecialniUtok(prvniProtivnikuvCichnamon);
+                    }
 
-                    protivnik = nastaveni.Treners[indexProtihrace];
-                    WriteLine($"Protivník si zvolil trenéra: {protivnik.Jmeno}");
+                    protivnikSeBrani = false;
 
-                    int akce = 0;
-                    bool nekdoUmrel = false;
-
-                    WriteLine();
-                    WriteLine();
-                    WriteLine("Hra spuštěna! Bojujte!");
-                    
-                    while(nekdoUmrel == false) {
+                    if (protivnik.ZobrazitZijiciCichnamony().Count == 0) {
+                        nekdoUmrel = true;
                         Clear();
-                        WriteLine();
-                        WriteLine();
-                        WriteLine($"Vaš trenér: {hrac.Jmeno} - HP: {hrac.ZobrazitZijiciCichnamony()[0].Zdravi}/{hrac.ZobrazitZijiciCichnamony()[0].MaxZdravi}");
-                        WriteLine($"Protihráč: {protivnik.Jmeno} - HP: {protivnik.ZobrazitZijiciCichnamony()[0].Zdravi}/{protivnik.ZobrazitZijiciCichnamony()[0].MaxZdravi}");
-                        WriteLine();
-                        WriteLine("1 - Útok");
-                        WriteLine("2 - Obrana");
-                        Write("Zvolte akci: ");
+                        ConsoleUI.ZobrazitLogo();
+                        ConsoleUI.ZobrazitVysledek($"Protihráč {protivnik.Jmeno} byl poražen!", true);
+                        ConsoleUI.ZobrazitKonecHry();
+                        return;
+                    }
 
-                        akce = int.Parse(ReadLine());
+                    break;
+                }
+                case 2:
+                {
+                    hracSeBrani = true;
+                    ConsoleUI.ZobrazitAkci("Zvolil jste obranu!");
+                    WriteLine();
+                    bool platnyCichnamon = false;
 
-                        switch (akce)
+                    while (platnyCichnamon == false) {
+                        ConsoleUI.ZobrazitNadpis("VÝBĚR CICHNAMONA", ConsoleColor.Yellow);
+                        hrac.ZobrazitCichnamony();
+                        WriteLine();
+
+                        int volbaCichnamona = ConsoleUI.CtiVolbu("Zvolte cichnamona: ") - 1;
+
+                        if (volbaCichnamona < 0 || volbaCichnamona >= hrac.Cichnamoni.Count || hrac.Cichnamoni[volbaCichnamona].Zdravi <= 0)
                         {
-                            case 1:
-                                WriteLine("Zvolil jste útok!");
-                                WriteLine();
-                                WriteLine("Zvolte cichnamona pro útok");
-                                hrac.ZobrazitCichnamony();
-                                WriteLine();
-                                Write("Zvolte cichnamona: ");
-                                Cichnamon zvolenyCichnamon = null;
-                                int volbaCichnamona = int.Parse(ReadLine()) - 1;
+                            ConsoleUI.ZobrazitChybu("Neplatná volba cichnamona.");
+                            continue;
+                        }
 
-                                if (volbaCichnamona < 0 || volbaCichnamona >= hrac.Cichnamoni.Count)
-                                {
-                                    WriteLine("Neplatná volba cichnamona.");
-                                    break;
-                                } else {
-                                    WriteLine($"Zvolil jste cichnamona: {hrac.Cichnamoni[volbaCichnamona].Jmeno}");
-                                    zvolenyCichnamon = hrac.Cichnamoni[volbaCichnamona];
-                                }
+                        ConsoleUI.ZobrazitUspech($"Zvolil jste cichnamona: {hrac.Cichnamoni[volbaCichnamona].Jmeno}");
+                        zvolenyCichnamon = hrac.Cichnamoni[volbaCichnamona];
+                        platnyCichnamon = true;
+                    }
+                    break;
+                }
+                case 3:
+                {
+                    ConsoleUI.ZobrazitAkci("Zvolil jste doplnění zdraví!");
+                    WriteLine();
+                    bool zvolenCichnamon = false;
+                    while (zvolenCichnamon == false) {
+                        ConsoleUI.ZobrazitNadpis("UZDRAVENÍ", ConsoleColor.Green);
+                        ConsoleUI.ZobrazitInfo("Pro změnu zvolte číslo 0");
+                        WriteLine();
+                        hrac.ZobrazitCichnamony();
+                        WriteLine();
 
-                                random = new Random();
+                        int volbaCichnamona = ConsoleUI.CtiVolbu("Zvolte cichnamona: ") - 1;
 
-                                int indexUtoku = random.Next(2);
+                        if (volbaCichnamona == 0)
+                        {
+                            continue;
+                        }
 
-                                Cichnamon prvniProtivnikuvCichnamon = protivnik.ZobrazitZijiciCichnamony()[0];
-                                
-                                if (indexUtoku == 0)
-                                {
-                                    zvolenyCichnamon.ZautocitZakladniUtok(prvniProtivnikuvCichnamon);
-                                }
-                                else
-                                {
-                                    zvolenyCichnamon.ZautocitSpecialniUtok(prvniProtivnikuvCichnamon);
-                                }
+                        if (volbaCichnamona < 0 || volbaCichnamona >= hrac.Cichnamoni.Count || hrac.Cichnamoni[volbaCichnamona].Zdravi <= 0)
+                        {
+                            ConsoleUI.ZobrazitChybu("Neplatná volba cichnamona.");
+                            continue;
+                        }
 
-                                if (prvniProtivnikuvCichnamon.Zdravi <= 0)
-                                {
-                                    nekdoUmrel = true;
-                                    WriteLine($"Protihráč {protivnik.Jmeno} byl poražen!");
-
-                                    WriteLine();
-                                    WriteLine();
-                                    WriteLine("Hra ukončena!");
-                                    WriteLine();
-                                    WriteLine();
-                                    return;
-                                }
-
-                                break;
-                            case 2:
-                                
-                                break;
-                            default:
-                                WriteLine("Neplatná akce.");
-                                break;
+                        zvolenyCichnamon = hrac.Cichnamoni[volbaCichnamona];
+                        bool bylUzdrav = zvolenyCichnamon.Uzdravit(10);
+                        if (bylUzdrav) {
+                            ConsoleUI.ZobrazitUzdraveni(zvolenyCichnamon.Jmeno, 10, true);
+                            zvolenCichnamon = true;
+                        } else {
+                            ConsoleUI.ZobrazitVarovani($"Vybraný cichnamon {zvolenyCichnamon.Jmeno} již má maximální zdraví!");
                         }
                     }
+                    break;
+                }
+                default:
+                    ConsoleUI.ZobrazitChybu("Neplatná akce.");
+                    break;
+            }
+
+            if (zvolenyCichnamon != null)
+            {
+                WriteLine();
+                ConsoleUI.ZobrazitNadpis("TAH PROTIVNÍKA", ConsoleColor.Red);
+                ConsoleUI.ZobrazitOddelovac();
+
+                bool hracUmrel = ProtivnikuvTah(protivnik, zvolenyCichnamon, hracSeBrani, out protivnikSeBrani);
+                if (hracUmrel)
+                {
+                    if (hrac.ZobrazitZijiciCichnamony().Count == 0)
+                    {
+                        nekdoUmrel = true;
+                        Clear();
+                        ConsoleUI.ZobrazitLogo();
+                        ConsoleUI.ZobrazitVysledek($"Vy ({hrac.Jmeno}) jste poraženi!", false);
+                        ConsoleUI.ZobrazitKonecHry();
+                        return;
+                    }
+                }
+
+                ConsoleUI.ZobrazitPokracovat();
+            }
+        }
     }
 
     static void Main()
     {
+        Clear();
         Nastaveni nastaveni = new Nastaveni(new List<Cichnamon>(), new List<Trener>(), new List<Utok>()).DefaultniNastaveni();
         int akce = 0;
         bool pokracovat = true;
 
         while (pokracovat)
         {
-            WriteLine("Akce: 1 - Spustit hru");
-            WriteLine("Akce: 2 - Zobrazit Cichnamony");
-            WriteLine("Akce: 3 - Zobrazit Trenery");
-            WriteLine("Akce: 4 - Ukoncit program");
-            WriteLine();
-            Write("Zadej číslo akce: ");
+            Clear();
+            ConsoleUI.ZobrazitLogo();
+            ConsoleUI.ZobrazitMenu("HLAVNÍ MENU", new[]
+            {
+                "1 - Spustit hru",
+                "2 - Zobrazit Cichnamony",
+                "3 - Zobrazit Trenery",
+                "4 - Ukončit program"
+            });
 
-            akce = int.Parse(ReadLine());
+            akce = ConsoleUI.CtiVolbu("Zadej číslo akce: ");
+            WriteLine();
 
             switch (akce)
             {
@@ -150,36 +324,24 @@ class Projekt
                     Game(nastaveni);
                     break;
                 case 2:
-                    WriteLine("");
-                    WriteLine("Dostupní Cichnamoni:");
-                    WriteLine("");
-                    foreach (Cichnamon cichnamon in nastaveni.Cichnamons)
-                    {
-                        WriteLine($"Cichnamon: {cichnamon.Jmeno}, HP: {cichnamon.Zdravi}, MaxHP: {cichnamon.MaxZdravi}");
-                    }
-                    WriteLine("");
-                    WriteLine("");
+                    Clear();
+                    ConsoleUI.ZobrazitVsechnyCichnamony(nastaveni.Cichnamons);
+                    ConsoleUI.ZobrazitPokracovat();
                     break;
                 case 3:
-                    WriteLine("");
-                    WriteLine("Dostupní Trenéři:");
-                    WriteLine("");
-                    foreach (Trener trener in nastaveni.Treners)
-                    {
-                        WriteLine($"Trener: {trener.Jmeno}");
-                    }
-                    WriteLine("");
-                    WriteLine("");
+                    Clear();
+                    ConsoleUI.ZobrazitTrenery(nastaveni.Treners);
+                    ConsoleUI.ZobrazitPokracovat();
                     break;
                 case 4:
-                    WriteLine("");
-                    WriteLine("");
-                    WriteLine("");
-                    WriteLine("Program ukončen.");
+                    Clear();
+                    ConsoleUI.ZobrazitLogo();
+                    ConsoleUI.ZobrazitInfo("Program ukončen. Na shledanou!");
                     pokracovat = false;
                     return;
                 default:
-                    WriteLine("Neplatná akce.");
+                    ConsoleUI.ZobrazitChybu("Neplatná akce.");
+                    ConsoleUI.ZobrazitPokracovat();
                     break;
             }
         }

@@ -1,5 +1,3 @@
-using static System.Console;
-
 class Trener
 {
     public string Jmeno { get; set; }
@@ -17,12 +15,7 @@ class Trener
 
     public void ZobrazitCichnamony()
     {
-        int i = 0;
-        foreach (Cichnamon cichnamon in Cichnamoni)
-        {
-            WriteLine($"{i + 1} - {cichnamon.Jmeno}, HP: {cichnamon.Zdravi}/{cichnamon.MaxZdravi}");
-            i++;
-        }
+        ConsoleUI.ZobrazitCichnamonSeznam(Cichnamoni);
     }
 
     public List<Cichnamon> ZobrazitZijiciCichnamony()
@@ -36,5 +29,17 @@ class Trener
             }
         }
         return zijiciCichnamoni;
+    }
+
+    public int VratitZivotnostCichnamona()
+    {
+        int zivotnost = 0;
+        foreach (Cichnamon cichnamon in Cichnamoni)
+        {
+            zivotnost += cichnamon.Zdravi;
+        }
+
+        int zivotnostCichnamona = (int)Math.Round((double)zivotnost / Cichnamoni.Count);
+        return zivotnostCichnamona;
     }
 }

@@ -20,12 +20,16 @@ class Cichnamon
 
     public void ZautocitZakladniUtok(Cichnamon protivnikuvCichnamon)
     {
-        protivnikuvCichnamon.SnizitZdravi(ZakladniUtok.PoskozeniUtoku);
+        int poskozeni = ZakladniUtok.PoskozeniUtoku;
+        protivnikuvCichnamon.SnizitZdravi(poskozeni);
+        ConsoleUI.ZobrazitUtok(Jmeno, ZakladniUtok, protivnikuvCichnamon.Jmeno, poskozeni);
     }
 
     public void ZautocitSpecialniUtok(Cichnamon protivnikuvCichnamon)
     {
-        protivnikuvCichnamon.SnizitZdravi(SpecialniUtok.PoskozeniUtoku);
+        int poskozeni = SpecialniUtok.PoskozeniUtoku;
+        protivnikuvCichnamon.SnizitZdravi(poskozeni);
+        ConsoleUI.ZobrazitUtok(Jmeno, SpecialniUtok, protivnikuvCichnamon.Jmeno, poskozeni);
     }
 
     public void SnizitZdravi(int hodnota)
@@ -37,12 +41,15 @@ class Cichnamon
         }
     }
 
-    public void Uzdravit(int hodnota)
+    public bool Uzdravit(int hodnota)
     {
         Zdravi += hodnota;
         if (Zdravi > MaxZdravi)
         {
             Zdravi = MaxZdravi;
+            return false;
         }
+
+        return true;
     }
 }

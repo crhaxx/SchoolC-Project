@@ -27,15 +27,18 @@ class Nastaveni
         Cichnamon DomcaMon = new Cichnamon("Domca", 100, 100, 10, utoks[0], utoks[1]);
         Cichnamon SlabceMon = new Cichnamon("Slabce", 100, 100, 10, utoks[2], utoks[3]);
         Cichnamon SlusnaMon = new Cichnamon("Slusna", 100, 100, 10, utoks[3], utoks[4]);
+        Cichnamon VekaMon = new Cichnamon("Veka", 100, 100, 10, utoks[0], utoks[1]);
+        Cichnamon kouzelMon = new Cichnamon("Kouzel", 100, 100, 10, utoks[0], utoks[1]);
+        Cichnamon tajnaMon = new Cichnamon("Tajna", 100, 100, 10, utoks[0], utoks[1]);
+        Cichnamon prirodaMon = new Cichnamon("Priroda", 100, 100, 10, utoks[0], utoks[1]);
 
-        List<Cichnamon> XuCichnamoni = [SvetrMon, DomcaMon];
-        List<Cichnamon> RabotCichnamoni = [DomcaMon, SvetrMon];
-        List<Cichnamon> SlabceCichnamoni = [SlabceMon, SvetrMon];
+        List<Cichnamon> XuCichnamoni = [SvetrMon, VekaMon];
+        List<Cichnamon> RabotCichnamoni = [kouzelMon, prirodaMon];
+        List<Cichnamon> SlabceCichnamoni = [SlabceMon, tajnaMon];
         List<Cichnamon> SlusnaCichnamoni = [SlusnaMon, DomcaMon];
 
-
         Trener Xuperman = new Trener(jmeno: "Xuperman", XuCichnamoni, SvetrMon);
-        Trener Rabot = new Trener(jmeno: "Rabot", RabotCichnamoni, DomcaMon);
+        Trener Rabot = new Trener(jmeno: "Rabot", RabotCichnamoni, kouzelMon);
         Trener Slabce = new Trener(jmeno: "Slabce", SlabceCichnamoni, SlabceMon);
         Trener Slusna = new Trener(jmeno: "Slusna", SlusnaCichnamoni, SlusnaMon);
 
@@ -45,6 +48,10 @@ class Nastaveni
         cichnamons.Add(DomcaMon);
         cichnamons.Add(SlabceMon);
         cichnamons.Add(SlusnaMon);
+        cichnamons.Add(VekaMon);
+        cichnamons.Add(kouzelMon);
+        cichnamons.Add(tajnaMon);
+        cichnamons.Add(prirodaMon);
 
         treners.Add(Xuperman);
         treners.Add(Rabot);
