@@ -85,6 +85,7 @@ class Projekt
 
     static void Game() {
         Clear();
+        Nastaveni.DefaultniNastaveni();
         ConsoleUI.ZobrazitLogo();
         ConsoleUI.ZobrazitNadpis("NOVÁ HRA", ConsoleColor.Green);
 
@@ -242,12 +243,14 @@ class Projekt
                         hrac.ZobrazitCichnamony();
                         WriteLine();
 
-                        int volbaCichnamona = ConsoleUI.CtiVolbu("Zvolte cichnamona: ") - 1;
+                        int volba = ConsoleUI.CtiVolbu("Zvolte cichnamona: ");
 
-                        if (volbaCichnamona == 0)
+                        if (volba == 0)
                         {
-                            continue;
+                            break;
                         }
+
+                        int volbaCichnamona = volba - 1;
 
                         if (volbaCichnamona < 0 || volbaCichnamona >= hrac.Cichnamoni.Count || hrac.Cichnamoni[volbaCichnamona].Zdravi <= 0)
                         {

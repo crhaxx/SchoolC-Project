@@ -204,7 +204,7 @@ static class ConsoleUI
     public static void ZobrazitUtok(string utocnik, Utok utok, string obrance, int poskozeni)
     {
         ForegroundColor = ConsoleColor.Yellow;
-        WriteLine($"  ⚡ {utocnik} použil {utok.Nazev} ({poskozeni} dmg) proti {obrance}!");
+        WriteLine($"  ⚡ {utocnik} použil {utok.Nazev} (ubral {poskozeni} HP) proti {obrance}!");
         ResetColor();
         ForegroundColor = ConsoleColor.DarkYellow;
         WriteLine($"     \"{utok.PopisUtoku}\"");
@@ -307,9 +307,19 @@ static class ConsoleUI
 
     public static int CtiVolbu(string vyzva)
     {
-        ForegroundColor = ConsoleColor.White;
-        Write($"  {vyzva}");
-        ResetColor();
-        return int.Parse(ReadLine()!);
+        while (true)
+        {
+            ForegroundColor = ConsoleColor.White;
+            Write($"  {vyzva}");
+            ResetColor();
+
+            string? vstup = ReadLine();
+            if (int.TryParse(vstup, out int volba))
+            {
+                return volba;
+            }
+
+            ZobrazitChybu("Zadejte platné celé číslo.");
+        }
     }
 }
