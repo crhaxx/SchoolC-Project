@@ -3,6 +3,7 @@ using static System.Console;
 static class ConsoleUI
 {
     const int Sirka = 52;
+    const int VnitrniSirkaTabulky = 46;
 
     public static void ZobrazitLogo()
     {
@@ -226,37 +227,87 @@ static class ConsoleUI
         ResetColor();
     }
 
+    static string VytvoritHorniOkrajTabulky()
+    {
+        return "  ┌" + new string('─', VnitrniSirkaTabulky + 4) + "┐";
+    }
+
+    static string VytvoritSpodniOkrajTabulky()
+    {
+        return "  └" + new string('─', VnitrniSirkaTabulky + 4) + "┘";
+    }
+
+    static void ZobrazitPrazdnyRadekTabulky()
+    {
+        ForegroundColor = ConsoleColor.White;
+        WriteLine($"  │  {new string(' ', VnitrniSirkaTabulky)}  │");
+    }
+
+    static void ZobrazitRadekTabulky(string obsah)
+    {
+        ForegroundColor = ConsoleColor.White;
+        WriteLine($"  │  {obsah.PadRight(VnitrniSirkaTabulky)}  │");
+    }
+
+    static void ZobrazitRadekHP(string jmeno, int zdravi, int maxZdravi, string prefix = "", int delkaBaru = 12)
+    {
+        string hpText = $" {zdravi,3}/{maxZdravi,-3}";
+        int delkaObsahu = prefix.Length + 12 + 1 + delkaBaru + hpText.Length;
+        int padding = VnitrniSirkaTabulky - delkaObsahu;
+
+        Write("  │  ");
+        ForegroundColor = ConsoleColor.White;
+        if (prefix.Length > 0)
+        {
+            Write(prefix);
+        }
+
+        Write($"{jmeno,-12} ");
+        ForegroundColor = BarvaHP(zdravi, maxZdravi);
+        Write(VytvoritHPBar(zdravi, maxZdravi, delkaBaru));
+        ResetColor();
+        ForegroundColor = ConsoleColor.White;
+        Write(hpText);
+        Write(new string(' ', Math.Max(0, padding)));
+        WriteLine("  │");
+    }
+
+    static string VytvoritTextUtoku(Cichnamon cichnamon)
+    {
+        return $"    Útoky: {cichnamon.ZakladniUtok.Nazev} ({cichnamon.ZakladniUtok.PoskozeniUtoku}), {cichnamon.SpecialniUtok.Nazev} ({cichnamon.SpecialniUtok.PoskozeniUtoku})";
+    }
+
     public static void ZobrazitCichnamonSeznam(IEnumerable<Cichnamon> cichnamoni)
     {
         ForegroundColor = ConsoleColor.White;
-        WriteLine("  ┌────────────────────────────────────────────┐");
+        WriteLine(VytvoritHorniOkrajTabulky());
 
         int i = 1;
+        bool prvni = true;
         foreach (Cichnamon cichnamon in cichnamoni)
         {
-            Write($"  │  {i,2}. ");
+            if (!prvni)
+            {
+                ZobrazitPrazdnyRadekTabulky();
+            }
+
+            prvni = false;
+            string prefix = $"{i,2}. ";
+
             if (cichnamon.Zdravi <= 0)
             {
-                ForegroundColor = ConsoleColor.DarkGray;
-                WriteLine($"{cichnamon.Jmeno,-12} ☠ Mrtvý".PadRight(38) + "  │");
+                ZobrazitRadekTabulky($"{prefix}{cichnamon.Jmeno,-12} ☠ Mrtvý");
             }
             else
             {
-                ResetColor();
-                ForegroundColor = ConsoleColor.White;
-                Write($"{cichnamon.Jmeno,-12} ");
-                ForegroundColor = BarvaHP(cichnamon.Zdravi, cichnamon.MaxZdravi);
-                Write(VytvoritHPBar(cichnamon.Zdravi, cichnamon.MaxZdravi, 12));
-                ResetColor();
-                ForegroundColor = ConsoleColor.White;
-                WriteLine($" {cichnamon.Zdravi,3}/{cichnamon.MaxZdravi,-3}".PadRight(22) + "  │");
+                ZobrazitRadekHP(cichnamon.Jmeno, cichnamon.Zdravi, cichnamon.MaxZdravi, prefix);
             }
 
             i++;
         }
 
         ResetColor();
-        WriteLine("  └────────────────────────────────────────────┘");
+        WriteLine(VytvoritSpodniOkrajTabulky());
         ResetColor();
     }
 
@@ -287,20 +338,22 @@ static class ConsoleUI
         ZobrazitNadpis("DOSTUPNÍ CICHNAMONI", ConsoleColor.Cyan);
 
         ForegroundColor = ConsoleColor.White;
-        WriteLine("  ┌────────────────────────────────────────────┐");
+        WriteLine(VytvoritHorniOkrajTabulky());
 
+        bool prvni = true;
         foreach (Cichnamon cichnamon in cichnamoni)
         {
-            Write($"  │  {cichnamon.Jmeno,-12} ");
-            ForegroundColor = BarvaHP(cichnamon.Zdravi, cichnamon.MaxZdravi);
-            Write(VytvoritHPBar(cichnamon.Zdravi, cichnamon.MaxZdravi, 12));
-            ResetColor();
-            ForegroundColor = ConsoleColor.White;
-            WriteLine($" {cichnamon.Zdravi,3}/{cichnamon.MaxZdravi,-3}  │");
-            WriteLine($"  │      Útoky: {cichnamon.ZakladniUtok.Nazev} ({cichnamon.ZakladniUtok.PoskozeniUtoku}), {cichnamon.SpecialniUtok.Nazev} ({cichnamon.SpecialniUtok.PoskozeniUtoku})".PadRight(44) + "  │");
+            if (!prvni)
+            {
+                ZobrazitPrazdnyRadekTabulky();
+            }
+
+            prvni = false;
+            ZobrazitRadekHP(cichnamon.Jmeno, cichnamon.Zdravi, cichnamon.MaxZdravi);
+            ZobrazitRadekTabulky(VytvoritTextUtoku(cichnamon));
         }
 
-        WriteLine("  └────────────────────────────────────────────┘");
+        WriteLine(VytvoritSpodniOkrajTabulky());
         ResetColor();
         WriteLine();
     }

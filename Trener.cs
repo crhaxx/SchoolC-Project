@@ -34,12 +34,14 @@ class Trener
     public int VratitZivotnostCichnamona()
     {
         int zivotnost = 0;
+        int maxZivotnost = 0;
         foreach (Cichnamon cichnamon in Cichnamoni)
         {
             zivotnost += cichnamon.Zdravi;
+            maxZivotnost += cichnamon.MaxZdravi;
         }
 
-        int zivotnostCichnamona = (int)Math.Round((double)zivotnost / Cichnamoni.Count);
+        int zivotnostCichnamona = (int)Math.Round((double)zivotnost / maxZivotnost * 100);
         return zivotnostCichnamona;
     }
 }

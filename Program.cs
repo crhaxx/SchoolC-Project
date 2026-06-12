@@ -7,8 +7,13 @@ class Projekt
         int volbaAkce = random.Next(1, 4);
         protivnikSeBrani = false;
 
-        int volbaCichnamona = random.Next(protivnik.Cichnamoni.Count);
-        Cichnamon zvolenyProtivnikuvCichnamon = protivnik.Cichnamoni[volbaCichnamona];
+        List<Cichnamon> zijiciCichnamoni = protivnik.ZobrazitZijiciCichnamony();
+        if (zijiciCichnamoni.Count == 0)
+        {
+            return false;
+        }
+
+        Cichnamon zvolenyProtivnikuvCichnamon = zijiciCichnamoni[random.Next(zijiciCichnamoni.Count)];
         ConsoleUI.ZobrazitAkci($"Protivník zvolil cichnamona: {zvolenyProtivnikuvCichnamon.Jmeno}");
 
         switch (volbaAkce) {
