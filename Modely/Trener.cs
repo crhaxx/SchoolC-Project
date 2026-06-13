@@ -1,16 +1,36 @@
 class Trener
 {
     public string Jmeno { get; set; }
-    public int Level { get; set; }
     public List<Cichnamon> Cichnamoni { get; set; }
     public Cichnamon VybranyCichnamon { get; set; }
 
-    public Trener(string jmeno, List<Cichnamon> cichnamoni, Cichnamon vybranyCichnamon, int level = 0)
+    public Trener(string jmeno, List<Cichnamon> cichnamoni, Cichnamon vybranyCichnamon)
     {
         Jmeno = jmeno;
-        Level = level;
         Cichnamoni = cichnamoni;
         VybranyCichnamon = vybranyCichnamon;
+    }
+
+    public void VybratCichnamona(Cichnamon cichnamon)
+    {
+        VybranyCichnamon = cichnamon;
+    }
+
+    public Cichnamon? ZiskatAktivnihoCichnamona()
+    {
+        if (VybranyCichnamon != null && VybranyCichnamon.Zdravi > 0)
+        {
+            return VybranyCichnamon;
+        }
+
+        List<Cichnamon> zijiciCichnamoni = ZobrazitZijiciCichnamony();
+        if (zijiciCichnamoni.Count == 0)
+        {
+            return null;
+        }
+
+        VybranyCichnamon = zijiciCichnamoni[0];
+        return VybranyCichnamon;
     }
 
     public void ZobrazitCichnamony()

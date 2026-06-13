@@ -188,7 +188,9 @@ static class ConsoleUI
 
         foreach (Cichnamon cichnamon in trener.Cichnamoni)
         {
-            ZobrazitHP(cichnamon.Jmeno, cichnamon.Zdravi, cichnamon.MaxZdravi, cichnamon.Zdravi <= 0);
+            bool jeAktivni = trener.VybranyCichnamon == cichnamon && cichnamon.Zdravi > 0;
+            string jmeno = jeAktivni ? $"{cichnamon.Jmeno} ★" : cichnamon.Jmeno;
+            ZobrazitHP(jmeno, cichnamon.Zdravi, cichnamon.MaxZdravi, cichnamon.Zdravi <= 0);
         }
     }
 
@@ -212,10 +214,23 @@ static class ConsoleUI
         ResetColor();
     }
 
-    public static void ZobrazitObranu(string jmeno)
+    public static void ZobrazitObranu(string jmeno, bool jeProtivnik = false)
     {
         ForegroundColor = ConsoleColor.Blue;
-        WriteLine($"  🛡  {jmeno} se úspěšně ubránil!");
+        string text = jeProtivnik
+            ? $"Protivník ({jmeno}) se úspěšně ubránil!"
+            : $"{jmeno} se úspěšně ubránil!";
+        WriteLine($"  🛡  {text}");
+        ResetColor();
+    }
+
+    public static void ZobrazitNeuspesnouObranu(string jmeno, bool jeProtivnik = false)
+    {
+        ForegroundColor = ConsoleColor.DarkYellow;
+        string text = jeProtivnik
+            ? $"Protivník ({jmeno}) se neubránil!"
+            : $"{jmeno} se neubránil!";
+        WriteLine($"  ✗  {text}");
         ResetColor();
     }
 

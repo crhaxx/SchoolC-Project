@@ -1,6 +1,10 @@
 {
   "version": 2,
+<<<<<<< HEAD
   "dgSpecHash": "SFrjXCf91+U=",
+=======
+  "dgSpecHash": "ZWQfsqvSmcc=",
+>>>>>>> aa2be9f (Logic)
   "success": true,
   "projectFilePath": "/home/nikola/Desktop/code/c#/SchoolC-Project/Project.csproj",
   "expectedPackageFiles": [],

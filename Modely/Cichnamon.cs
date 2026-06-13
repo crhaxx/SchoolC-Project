@@ -3,17 +3,15 @@ class Cichnamon
     public string Jmeno { get; set; }
     public int Zdravi { get; set; }
     public int MaxZdravi { get; set; }
-    public int BonusSilaUtoku { get; set; }
     public Utok ZakladniUtok { get; set; }
     public Utok SpecialniUtok { get; set; }
 
 
-    public Cichnamon(string jmeno, int zdravi, int maxZdravi, int bonusSilaUtoku, Utok zakladniUtok, Utok specialniUtok)
+    public Cichnamon(string jmeno, int zdravi, int maxZdravi, Utok zakladniUtok, Utok specialniUtok)
     {
         Jmeno = jmeno;
         Zdravi = zdravi;
         MaxZdravi = maxZdravi;
-        BonusSilaUtoku = bonusSilaUtoku;
         ZakladniUtok = zakladniUtok;
         SpecialniUtok = specialniUtok;
     }
@@ -43,11 +41,17 @@ class Cichnamon
 
     public bool Uzdravit(int hodnota)
     {
+        if (Zdravi >= MaxZdravi)
+        {
+            return false;
+        }
+        
+
         Zdravi += hodnota;
+
         if (Zdravi > MaxZdravi)
         {
             Zdravi = MaxZdravi;
-            return false;
         }
 
         return true;

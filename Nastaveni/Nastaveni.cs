@@ -24,14 +24,14 @@ static class Nastaveni
         utoks.Add(new Utok("Backhand", 20, "Backhand z rohu stolu, technicky náročný, ale spolehlivý"));
         utoks.Add(new Utok("Boční rotace", 32, "Míček ostře zatáčí do boku, soupeř míří špatným směrem"));
 
-        Cichnamon SvetrMon = new Cichnamon("Svetr", 85, 85, 22, utoks[2], utoks[3]);
-        Cichnamon DomcaMon = new Cichnamon("Domca", 115, 115, 10, utoks[0], utoks[1]);
-        Cichnamon PepikMon = new Cichnamon("Pepík", 125, 125, 4, utoks[2], utoks[8]);
-        Cichnamon MaraMon = new Cichnamon("Mára", 80, 80, 16, utoks[5], utoks[4]);
-        Cichnamon VitekMon = new Cichnamon("Vítek", 70, 70, 20, utoks[9], utoks[4]);
-        Cichnamon RobikMon = new Cichnamon("Robík", 95, 95, 24, utoks[6], utoks[12]);
-        Cichnamon FilaMon = new Cichnamon("Fíla", 90, 90, 14, utoks[10], utoks[2]);
-        Cichnamon LubaMon = new Cichnamon("Luba", 110, 110, 7, utoks[7], utoks[11]);
+        Cichnamon SvetrMon = new Cichnamon("Svetr", 85, 85, utoks[2], utoks[3]);
+        Cichnamon DomcaMon = new Cichnamon("Domca", 115, 115, utoks[1], utoks[0]);
+        Cichnamon PepikMon = new Cichnamon("Pepík", 125, 125, utoks[2], utoks[8]);
+        Cichnamon MaraMon = new Cichnamon("Mára", 80, 80, utoks[5], utoks[4]);
+        Cichnamon VitekMon = new Cichnamon("Vítek", 70, 70, utoks[9], utoks[4]);
+        Cichnamon RobikMon = new Cichnamon("Robík", 95, 95, utoks[6], utoks[12]);
+        Cichnamon FilaMon = new Cichnamon("Fíla", 90, 90, utoks[2], utoks[10]);
+        Cichnamon LubaMon = new Cichnamon("Luba", 110, 110, utoks[7], utoks[11]);
 
         List<Cichnamon> XuCichnamoni = [SvetrMon, VitekMon];
         List<Cichnamon> RabotCichnamoni = [RobikMon, LubaMon];
@@ -43,19 +43,9 @@ static class Nastaveni
         Trener Kuba = new Trener(jmeno: "Kuba", KubaCichnamoni, PepikMon);
         Trener Honza = new Trener(jmeno: "Honza", HonzaCichnamoni, MaraMon);
 
-        cichnamons.Add(SvetrMon);
-        cichnamons.Add(DomcaMon);
-        cichnamons.Add(PepikMon);
-        cichnamons.Add(MaraMon);
-        cichnamons.Add(VitekMon);
-        cichnamons.Add(RobikMon);
-        cichnamons.Add(FilaMon);
-        cichnamons.Add(LubaMon);
+        cichnamons = [SvetrMon, DomcaMon, PepikMon, MaraMon, VitekMon, RobikMon, FilaMon, LubaMon];
 
-        treners.Add(Xuperman);
-        treners.Add(Rabot);
-        treners.Add(Kuba);
-        treners.Add(Honza);
+        treners = [Xuperman, Rabot, Kuba, Honza];
 
         Cichnamons = cichnamons;
         Treners = treners;
