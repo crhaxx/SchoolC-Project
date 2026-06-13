@@ -8,11 +8,7 @@
     "net10.0": []
   },
   "packageFolders": {
-<<<<<<< HEAD
     "/home/nikola/.nuget/packages/": {}
-=======
-    "/tmp/cursor-sandbox-cache/dcfb0c9b45f801269195432e5fc221fb/nuget": {}
->>>>>>> aa2be9f (Logic)
   },
   "project": {
     "version": "1.0.0",
@@ -20,11 +16,7 @@
       "projectUniqueName": "/home/nikola/Desktop/code/c#/SchoolC-Project/Project.csproj",
       "projectName": "Project",
       "projectPath": "/home/nikola/Desktop/code/c#/SchoolC-Project/Project.csproj",
-<<<<<<< HEAD
       "packagesPath": "/home/nikola/.nuget/packages/",
-=======
-      "packagesPath": "/tmp/cursor-sandbox-cache/dcfb0c9b45f801269195432e5fc221fb/nuget",
->>>>>>> aa2be9f (Logic)
       "outputPath": "/home/nikola/Desktop/code/c#/SchoolC-Project/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
